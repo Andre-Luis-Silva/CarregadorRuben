@@ -1,0 +1,3 @@
+../Core/Src/adcFile.c:9:6:ConfigAdc	16	static
+../Core/Src/adcFile.c:24:6:ChannelConfigurationReadyFlag	8	static
+../Core/Src/adcFile.c:29:5:ReadAdc	16	static
