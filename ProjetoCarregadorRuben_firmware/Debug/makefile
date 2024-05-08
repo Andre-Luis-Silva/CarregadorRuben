@@ -60,8 +60,8 @@ all: main-build
 main-build: ProjetoCarregadorRuben.elf secondary-outputs
 
 # Tool invocations
-ProjetoCarregadorRuben.elf ProjetoCarregadorRuben.map: $(OBJS) $(USER_OBJS) C:\Users\Andre\STM32CubeIDE\workspace_1.12.0\ProjetoCarregadorRuben\STM32C031C6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ProjetoCarregadorRuben.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Andre\STM32CubeIDE\workspace_1.12.0\ProjetoCarregadorRuben\STM32C031C6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ProjetoCarregadorRuben.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ProjetoCarregadorRuben.elf ProjetoCarregadorRuben.map: $(OBJS) $(USER_OBJS) C:\Users\Andre\Desktop\Projeto\ Ruben\CarregadorRuben\ProjetoCarregadorRuben_firmware\STM32C031C6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ProjetoCarregadorRuben.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Andre\Desktop\Projeto Ruben\CarregadorRuben\ProjetoCarregadorRuben_firmware\STM32C031C6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ProjetoCarregadorRuben.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
