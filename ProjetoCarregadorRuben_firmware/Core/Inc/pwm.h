@@ -10,4 +10,6 @@
 
 #include "main.h"
 
+void PwmConfig(void);
+
 #endif /* INC_PWM_H_ */
