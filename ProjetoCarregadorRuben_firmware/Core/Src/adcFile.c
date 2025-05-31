@@ -28,8 +28,8 @@ void ChannelConfigurationReadyFlag(void)
 
 int ReadAdc(int channel)
 {
-	ChannelConfigurationReadyFlag();
 	ADC1->CHSELR = (1 << channel);
+	ChannelConfigurationReadyFlag();
 	ADC1->CR |= ADC_CR_ADSTART;
 	while(ADC1->CR & ADC_CR_ADSTART);
 	ADC1->CHSELR = 0;
