@@ -33,8 +33,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define FACTOR_VOLTAGE	0.00886	// It's the factor to convert AD measure in Voltage: 3.3*11/4096
-#define INPUT_VOLTAGE	4
-#define OUTPUT_VOLTAGE	0
+#define INPUT_VOLTAGE	0
+#define OUTPUT_VOLTAGE	4
 #define BATTERY_VOLTAGE	1
 #define MAXIMUM_PWM	400
 #define LOW_VOLTAGE	5
@@ -71,7 +71,7 @@ int main(void)
 {
 
 	/* USER CODE BEGIN 1 */
-	uint16_t pwmBoost = MAXIMUM_PWM;
+	uint16_t pwmBoost = 0;
 	uint16_t pwmBuck = MAXIMUM_PWM;
 	uint8_t estado = 0;
 	float voltage12V = 0;
@@ -108,6 +108,8 @@ int main(void)
 	{
 		/* USER CODE END WHILE */
 		voltage12V = ReadAdc(INPUT_VOLTAGE) * FACTOR_VOLTAGE;
+		//voltage3dot7V = ReadAdc(BATTERY_VOLTAGE) * FACTOR_VOLTAGE - 0.6;
+
 		switch(estado)
 		{
 		case 0:
@@ -115,46 +117,48 @@ int main(void)
 			if(voltage12V < LOW_VOLTAGE)
 			{
 				estado = 1;
-				TIM1->CCR1 = MAXIMUM_PWM;
+				TIM1->CCR2 = 0; //Boost
 			}
 			else if(voltage12V > HIGH_VOLTAGE)
 			{
 				estado = 2;
-				TIM1->CCR2 = MAXIMUM_PWM;
+				TIM1->CCR1 = MAXIMUM_PWM;	//Buck
 			}
 			break;
 
 		case 1:
 
-			voltage3dot7V = ReadAdc(BATTERY_VOLTAGE) * FACTOR_VOLTAGE - 0.6;
+			TIM1->CCR1 = 400;
+			voltage3dot7V = ReadAdc(BATTERY_VOLTAGE) * FACTOR_VOLTAGE;
 			if(voltage3dot7V > 3.2)
 			{
 				outputVoltage = ReadAdc(OUTPUT_VOLTAGE) * FACTOR_VOLTAGE;
-				if((outputVoltage > 5) && pwmBoost < 400)
+				if((outputVoltage < 5) && pwmBoost < 400)
 				{
 					pwmBoost++;
 				}
-				else if((outputVoltage < 5) && pwmBoost > 0)
+				else if((outputVoltage > 5) && pwmBoost > 0)
 				{
 					pwmBoost--;
 				}
-				TIM1->CCR1 = pwmBoost;
+				TIM1->CCR2 = pwmBoost;
 			}
 			else
 			{
-				TIM1->CCR1 = MAXIMUM_PWM;
+				TIM1->CCR2 = 0;
 			}
 
 			if(voltage12V > HIGH_VOLTAGE)
 			{
 				estado = 2;
-				TIM1->CCR1 = MAXIMUM_PWM;
+				TIM1->CCR2 = 0;
 			}
 
 			break;
 
 		case 2:
 
+			TIM1->CCR2 = 0;
 			outputVoltage = ReadAdc(OUTPUT_VOLTAGE) * FACTOR_VOLTAGE;
 			if((outputVoltage > 5) && pwmBuck > 0)
 			{
@@ -164,11 +168,11 @@ int main(void)
 			{
 				pwmBuck++;
 			}
-			TIM1->CCR2 = pwmBuck;
+			TIM1->CCR1 = pwmBuck;
 			if(voltage12V < LOW_VOLTAGE)
 			{
 				estado = 1;
-				TIM1->CCR2 = MAXIMUM_PWM;
+				TIM1->CCR1 = MAXIMUM_PWM;
 			}
 			break;
 		}
