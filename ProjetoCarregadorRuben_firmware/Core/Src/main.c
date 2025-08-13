@@ -88,10 +88,8 @@ int main(void)
 	ConfigAdc();
 	PwmConfig();
 	/* USER CODE END Init */
-
 	/* Configure the system clock */
 	SystemClock_Config();
-
 	/* USER CODE BEGIN SysInit */
 
 	/* USER CODE END SysInit */
@@ -133,7 +131,7 @@ int main(void)
 			if(voltage3dot7V > 3.2)
 			{
 				outputVoltage = ReadAdc(OUTPUT_VOLTAGE) * FACTOR_VOLTAGE;
-				if((outputVoltage < 5) && pwmBoost < 400)
+				if((outputVoltage < 5) && pwmBoost < 100)
 				{
 					pwmBoost++;
 				}
@@ -164,7 +162,7 @@ int main(void)
 			{
 				pwmBuck--;
 			}
-			else if((outputVoltage < 5) && pwmBuck < 400)
+			else if((outputVoltage < 5) && pwmBuck < 100)
 			{
 				pwmBuck++;
 			}
